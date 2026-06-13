@@ -17,7 +17,7 @@ export default function App() {
           <Route path="/articles" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/posts/:id" element={<PostPage />} />
+          <Route path="/articles/:id" element={<PostPage />} />
           <Route path="/editor" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
           <Route path="/editor/:id" element={<ProtectedRoute><EditorPage /></ProtectedRoute>} />
         </Routes>

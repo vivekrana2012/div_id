@@ -23,7 +23,7 @@ export default function DraftsPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/posts/mine')
+    api.get('/articles/mine')
       .then((res: AxiosResponse<{ content?: Post[] } | Post[]>) => {
         const data = res.data
         const all = Array.isArray(data) ? data : (data.content ?? [])

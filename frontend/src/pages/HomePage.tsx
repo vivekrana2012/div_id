@@ -27,7 +27,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/posts')
+    api.get('/articles')
       .then((res: AxiosResponse<{ content?: Post[] } | Post[]>) => {
         const data = res.data
         setPosts(Array.isArray(data) ? data : (data.content ?? []))
@@ -62,7 +62,7 @@ export default function HomePage() {
           <ul className="divide-y divide-(--color-border)">
             {posts.map(post => (
               <li key={post.id} className="py-10">
-                <Link to={`/posts/${post.id}`} className="group block">
+                <Link to={`/articles/${post.id}`} className="group block">
                   <h2 className="font-display font-black text-3xl md:text-4xl leading-tight text-(--color-ink) group-hover:text-(--color-accent) transition-colors mb-3">
                     {post.title}
                   </h2>

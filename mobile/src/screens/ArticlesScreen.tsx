@@ -31,7 +31,7 @@ export default function ArticlesScreen({ navigation }: Props) {
 
   async function loadPosts(pageNum: number, replace = false) {
     try {
-      const res = await client.get<Page<Post>>('/posts', { params: { page: pageNum, size: 20 } });
+      const res = await client.get<Page<Post>>('/articles', { params: { page: pageNum, size: 20 } });
       setPosts(replace ? res.data.content : [...posts, ...res.data.content]);
       setPage(pageNum);
       setHasMore(!res.data.last);

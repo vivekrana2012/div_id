@@ -34,7 +34,7 @@ export default function DraftsScreen({ navigation }: Props) {
 
   async function loadDrafts(pageNum: number, replace = false) {
     try {
-      const res = await client.get<Page<Post>>('/posts/mine', { params: { page: pageNum, size: 20 } });
+      const res = await client.get<Page<Post>>('/articles/mine', { params: { page: pageNum, size: 20 } });
       const drafts = res.data.content.filter((p) => p.status === 'draft');
       setPosts(replace ? drafts : [...posts, ...drafts]);
       setPage(pageNum);
@@ -66,7 +66,7 @@ export default function DraftsScreen({ navigation }: Props) {
         style: 'destructive',
         onPress: async () => {
           try {
-            await client.delete(`/posts/${id}`);
+            await client.delete(`/articles/${id}`);
             setPosts(posts.filter((p) => p.id !== id));
           } catch {
             Alert.alert('Error', 'Failed to delete draft');

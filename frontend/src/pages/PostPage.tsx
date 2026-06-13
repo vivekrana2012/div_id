@@ -31,7 +31,7 @@ export default function PostPage() {
 
   useEffect(() => {
     if (!id) return
-    api.get(`/posts/${id}`)
+    api.get(`/articles/${id}`)
       .then((res: AxiosResponse<Post>) => setPost(res.data))
       .catch((err: AxiosError) => {
         if (err.response?.status === 404) setNotFound(true)
@@ -41,7 +41,7 @@ export default function PostPage() {
 
   const handleDelete = async () => {
     if (!post || !confirm('Delete this article?')) return
-    await api.delete(`/posts/${post.id}`)
+    await api.delete(`/articles/${post.id}`)
     navigate('/')
   }
 

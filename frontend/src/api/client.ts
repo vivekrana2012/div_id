@@ -31,7 +31,7 @@ api.interceptors.response.use(
     const isAuthCheck = reqUrl === '/auth/me' || reqUrl.endsWith('/auth/me')
     const isRefreshAttempt = reqUrl === '/auth/refresh' || reqUrl.endsWith('/auth/refresh')
     const path = window.location.pathname
-    const onPublicPage = ['/login', '/register', '/articles'].includes(path) || path.startsWith('/posts/')
+    const onPublicPage = ['/login', '/register', '/articles'].includes(path) || path.startsWith('/articles/')
     
     if ((err.response?.status === 401 || err.response?.status === 403) && !isAuthCheck && !onPublicPage && !isRefreshAttempt) {
       if (isRefreshing) {

@@ -69,7 +69,7 @@ export default function EditorScreen({ route, navigation }: any) {
 
   async function loadPost() {
     try {
-      const res = await client.get<Post>(`/posts/${postId}`);
+      const res = await client.get<Post>(`/articles/${postId}`);
       setTitle(res.data.title);
       setBody(res.data.body);
       setNotes(res.data.notes || '');
@@ -100,9 +100,9 @@ export default function EditorScreen({ route, navigation }: any) {
           status: 'draft', // Always auto-save as draft
         };
         if (postId) {
-          await client.put(`/posts/${postId}`, payload);
+          await client.put(`/articles/${postId}`, payload);
         } else {
-          const res = await client.post('/posts', payload);
+          const res = await client.post('/articles', payload);
           // Update the postId for future saves
           route.params = { ...route.params, id: res.data.id };
         }
@@ -157,9 +157,9 @@ export default function EditorScreen({ route, navigation }: any) {
         status: publishStatus,
       };
       if (postId) {
-        await client.put(`/posts/${postId}`, payload);
+        await client.put(`/articles/${postId}`, payload);
       } else {
-        await client.post('/posts', payload);
+        await client.post('/articles', payload);
       }
       navigation.goBack();
     } catch (e: any) {
@@ -179,7 +179,7 @@ export default function EditorScreen({ route, navigation }: any) {
         style: 'destructive',
         onPress: async () => {
           try {
-            await client.delete(`/posts/${postId}`);
+            await client.delete(`/articles/${postId}`);
             navigation.goBack();
           } catch {
             Alert.alert('Error', 'Failed to delete');

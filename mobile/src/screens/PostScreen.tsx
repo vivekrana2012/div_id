@@ -24,7 +24,7 @@ export default function PostScreen({ route, navigation }: any) {
 
   async function loadPost() {
     try {
-      const res = await client.get<Post>(`/posts/${id}`);
+      const res = await client.get<Post>(`/articles/${id}`);
       setPost(res.data);
     } catch {
       setError('Article not found');

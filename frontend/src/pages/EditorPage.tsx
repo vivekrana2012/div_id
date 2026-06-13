@@ -50,7 +50,7 @@ export default function EditorPage() {
       postStatusRef.current = 'draft'
       return
     }
-    api.get(`/posts/${id}`)
+    api.get(`/articles/${id}`)
       .then((res: AxiosResponse<PostDetail>) => {
         setTitle(res.data.title)
         setBody(res.data.body)
@@ -121,14 +121,14 @@ export default function EditorPage() {
       try {
         setAutoSaveError('')
         if (isEdit) {
-          await api.put(`/posts/${id}`, {
+          await api.put(`/articles/${id}`, {
             title: currentTitle,
             body: currentBody,
             notes: currentNotes,
             status: 'draft', // Always auto-save as draft
           })
         } else {
-          const res = await api.post('/posts', {
+          const res = await api.post('/articles', {
             title: currentTitle,
             body: currentBody,
             notes: currentNotes,
@@ -244,11 +244,11 @@ export default function EditorPage() {
     setSaving(true)
     try {
       if (isEdit) {
-        await api.put(`/posts/${id}`, { title, body, notes, status: publishStatus })
-        navigate(`/posts/${id}`)
+        await api.put(`/articles/${id}`, { title, body, notes, status: publishStatus })
+        navigate(`/articles/${id}`)
       } else {
-        const res = await api.post('/posts', { title, body, notes, status: publishStatus })
-        navigate(`/posts/${res.data.id}`)
+        const res = await api.post('/articles', { title, body, notes, status: publishStatus })
+        navigate(`/articles/${res.data.id}`)
       }
     } catch (err: unknown) {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error
