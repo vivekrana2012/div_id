@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #F4F3EF;
+  --color-ink: #111111;
+  --color-accent: #E8502A;
+  --color-highlight: #E8D5C4;
+  --color-muted: #888888;
+  --color-border: #CCCCCC;
+
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-body: "Lora", Georgia, serif;
+  --font-ui: "Inter", system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* TipTap Editor Styles */
+.tiptap {
+  outline: none;
+}
+
+.tiptap-wrapper {
+  cursor: text;
+}
+
+.tiptap .ProseMirror {
+  outline: none;
+  min-height: 1.5em;
+}
+
+.tiptap p {
+  margin: 0;
+  line-height: inherit;
+}
+
+.tiptap p:first-of-type {
+  margin-top: 0;
+}
+
+.tiptap p:last-of-type {
+  margin-bottom: 0;
+}
+
+.tiptap p:empty::before {
+  content: attr(data-placeholder);
+  color: var(--color-border);
+  pointer-events: none;
+  height: 0;
+  float: left;
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  line-height: 1.1;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-weight: 700;
+}
+
+.tiptap h1 {
+  font-size: 2em;
+}
+
+.tiptap h2 {
+  font-size: 1.5em;
+}
+
+.tiptap h3 {
+  font-size: 1.25em;
+}
+
+.tiptap blockquote {
+  padding-left: 1em;
+  margin-left: 0;
+  border-left: 3px solid var(--color-border);
+  color: var(--color-muted);
+  font-style: italic;
+}
+
+.tiptap code {
+  background-color: var(--color-highlight);
+  color: var(--color-ink);
+  border-radius: 0.25em;
+  padding: 0.125em 0.25em;
+  font-family: "Courier New", monospace;
+  font-size: 0.9em;
+}
+
+.tiptap pre {
+  background: var(--color-highlight);
+  border-radius: 0.5em;
+  color: var(--color-ink);
+  font-family: "Courier New", monospace;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.tiptap pre code {
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding-left: 2em;
+}
+
+.tiptap li {
+  margin-bottom: 0.25em;
+}
+
+.tiptap strong {
+  font-weight: 700;
+}
+
+.tiptap em {
+  font-style: italic;
+}
+
