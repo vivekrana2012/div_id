@@ -1,0 +1,22 @@
+services:
+  backend:
+    image: vivekrana2012/divid-backend:latest
+    ports:
+      - "8080:8080"
+    environment:
+      JWT_SECRET: ${JWT_SECRET}
+      DIVID_DATA_DIR: /data
+    volumes:
+      - divid_data:/data
+    restart: unless-stopped
+
+  frontend:
+    image: vivekrana2012/divid-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  divid_data:
