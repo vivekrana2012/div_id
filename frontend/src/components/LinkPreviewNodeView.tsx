@@ -15,7 +15,7 @@ export function LinkPreviewNodeView({
   deleteNode,
   selected,
 }: any) {
-  const url = node.attrs.url
+  const url: string = node.attrs.url
 
   const { previews, loadingUrls } = useEditorPreviewContext()
   const preview = previews[url]
