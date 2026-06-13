@@ -12,8 +12,8 @@ export function useEditorPreviewContext() {
   const context = useContext(EditorPreviewContext)
   if (!context) {
     return {
-      previews: {},
-      loadingUrls: new Set(),
+      previews: {} as Record<string, LinkPreviewData>,
+      loadingUrls: new Set<string>(),
     }
   }
   return context
