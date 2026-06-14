@@ -29,6 +29,13 @@ BACKEND_PORT="18080"
 OUTPUT_DIR="ops/nginx/generated"
 INSTALL="false"
 SITE_NAME=""
+
+# Use sudo only if not already root
+if [[ "$(id -u)" -eq 0 ]]; then
+  SUDO=""
+else
+  SUDO="sudo"
+fi
 TEMPLATE_SOURCE_URL="${TEMPLATE_SOURCE_URL:-https://raw.githubusercontent.com/vivekrana2012/div_id/refs/heads/main/ops/nginx/divid-site.conf.template}"
 
 download_template() {
@@ -174,8 +181,8 @@ if [[ ! -d "$AVAILABLE_DIR" || ! -d "$ENABLED_DIR" ]]; then
   exit 1
 fi
 
-sudo cp "$OUTPUT_FILE" "$AVAILABLE_DIR/$SITE_NAME.conf"
-sudo ln -sfn "$AVAILABLE_DIR/$SITE_NAME.conf" "$ENABLED_DIR/$SITE_NAME.conf"
+$SUDO cp "$OUTPUT_FILE" "$AVAILABLE_DIR/$SITE_NAME.conf"
+$SUDO ln -sfn "$AVAILABLE_DIR/$SITE_NAME.conf" "$ENABLED_DIR/$SITE_NAME.conf"
 
 # Verify site symlink is enabled and points to expected config
 if [[ ! -L "$ENABLED_DIR/$SITE_NAME.conf" ]]; then
@@ -189,14 +196,14 @@ if [[ "$LINK_TARGET" != "$AVAILABLE_DIR/$SITE_NAME.conf" ]]; then
   exit 1
 fi
 
-sudo nginx -t
-sudo systemctl restart nginx
+$SUDO nginx -t
+$SUDO systemctl restart nginx
 
 # Verify nginx is active after restart
-sudo systemctl is-active --quiet nginx
+$SUDO systemctl is-active --quiet nginx
 
 # Verify generated server_name is present in active nginx config
-if ! sudo nginx -T 2>/dev/null | grep -F "server_name $DOMAIN;" >/dev/null; then
+if ! $SUDO nginx -T 2>/dev/null | grep -F "server_name $DOMAIN;" >/dev/null; then
   echo "Error: server_name $DOMAIN not found in active nginx config" >&2
   exit 1
 fi
