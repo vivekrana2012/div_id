@@ -2,7 +2,7 @@
 #  Divid — Makefile
 # ============================================================
 
-.PHONY: help dev down logs build fe-dev be-dev api-spec api-types
+.PHONY: help dev down logs build fe-dev be-dev api-spec api-types nginx-site nginx-site-install
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -40,3 +40,11 @@ api-spec: ## Export OpenAPI spec from running backend to docs/api/openapi.yaml
 api-types: ## Generate TypeScript types from OpenAPI spec
 	cd frontend && npm run generate:api
 	@echo "Done: frontend/src/api/schema.d.ts updated"
+
+# ---------- Homelab nginx ----------
+
+nginx-site: ## Generate nginx site config (required: DOMAIN=app.example.com)
+	bash scripts/setup-nginx-site.sh --domain "$(DOMAIN)"
+
+nginx-site-install: ## Generate + install nginx site (required: DOMAIN=app.example.com)
+	bash scripts/setup-nginx-site.sh --domain "$(DOMAIN)" --install

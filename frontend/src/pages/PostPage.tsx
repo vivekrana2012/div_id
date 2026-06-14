@@ -69,7 +69,7 @@ export default function PostPage() {
   return (
     <div className="min-h-screen bg-(--color-bg)">
       <Header />
-      <article className="max-w-2xl mx-auto px-6 pt-14 pb-24">
+      <article className="max-w-4xl mx-auto px-4 pt-14 pb-24">
         <div className="mb-6 flex items-center gap-4 font-ui text-xs uppercase tracking-widest text-(--color-muted) flex-wrap">
           <Link to="/articles" className="hover:text-(--color-accent) transition-colors">
             &larr; Articles
