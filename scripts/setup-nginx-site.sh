@@ -36,16 +36,55 @@ download_template() {
 
   if command -v curl >/dev/null 2>&1; then
     curl -fsSL "$TEMPLATE_SOURCE_URL" -o "$destination"
-    return
+    return $?
   fi
 
   if command -v wget >/dev/null 2>&1; then
     wget -qO "$destination" "$TEMPLATE_SOURCE_URL"
-    return
+    return $?
   fi
 
   echo "Error: neither curl nor wget is available to fetch the nginx template" >&2
-  exit 1
+  return 1
+}
+
+write_builtin_template() {
+  local destination="$1"
+
+  cat > "$destination" <<'EOF'
+server {
+    listen 127.0.0.1:80;
+    server_name __DOMAIN__;
+
+    # API traffic -> backend container
+    location /api/ {
+        proxy_pass http://127.0.0.1:__BACKEND_PORT__/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+    }
+
+    # Web traffic -> frontend container
+    location / {
+        proxy_pass http://127.0.0.1:__FRONTEND_PORT__;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_buffering off;
+        proxy_read_timeout 300s;
+    }
+}
+EOF
 }
 
 while [[ $# -gt 0 ]]; do
@@ -99,7 +138,12 @@ fi
 TEMPLATE="ops/nginx/divid-site.conf.template"
 if [[ ! -f "$TEMPLATE" ]]; then
   TEMPLATE="$(mktemp)"
-  download_template "$TEMPLATE"
+  if download_template "$TEMPLATE"; then
+    echo "Fetched nginx template from $TEMPLATE_SOURCE_URL"
+  else
+    echo "Warning: could not fetch remote template; using built-in fallback template." >&2
+    write_builtin_template "$TEMPLATE"
+  fi
   trap 'rm -f "$TEMPLATE"' EXIT
 fi
 
