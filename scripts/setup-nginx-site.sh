@@ -13,6 +13,7 @@ Options:
   --output-dir <path>      Where to write generated config (default: ops/nginx/generated)
   --install                Install to /etc/nginx/sites-available + enable in sites-enabled
   --name <site-name>       Site file name when installing (default: domain)
+  TEMPLATE_SOURCE_URL      Optional override for the remote nginx template URL
   -h, --help               Show this help
 
 Examples:
@@ -28,6 +29,24 @@ BACKEND_PORT="18080"
 OUTPUT_DIR="ops/nginx/generated"
 INSTALL="false"
 SITE_NAME=""
+TEMPLATE_SOURCE_URL="${TEMPLATE_SOURCE_URL:-https://raw.githubusercontent.com/vivekrana2012/div_id/refs/heads/main/ops/nginx/divid-site.conf.template}"
+
+download_template() {
+  local destination="$1"
+
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL "$TEMPLATE_SOURCE_URL" -o "$destination"
+    return
+  fi
+
+  if command -v wget >/dev/null 2>&1; then
+    wget -qO "$destination" "$TEMPLATE_SOURCE_URL"
+    return
+  fi
+
+  echo "Error: neither curl nor wget is available to fetch the nginx template" >&2
+  exit 1
+}
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -79,8 +98,9 @@ fi
 
 TEMPLATE="ops/nginx/divid-site.conf.template"
 if [[ ! -f "$TEMPLATE" ]]; then
-  echo "Error: template not found at $TEMPLATE" >&2
-  exit 1
+  TEMPLATE="$(mktemp)"
+  download_template "$TEMPLATE"
+  trap 'rm -f "$TEMPLATE"' EXIT
 fi
 
 mkdir -p "$OUTPUT_DIR"
